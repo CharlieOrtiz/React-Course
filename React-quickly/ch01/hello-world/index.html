@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="js/react.js"></script>
+    <script src="js/react-dom.js"></script>
+  </head>
+  <body>
+    <div id="content"></div>
+    <script type="text/javascript">
+    //In this HTML file we include the react libraries in the head tag, they are there to avoid some problems with other libraries or extensions that also manipulate the document body.
+
+    //Once we have our libraries we can get access to two objects, window.React and window.ReactDOM
+
+    //To create an element we need to make use of the React object, since this one is a library oriented toward building and sharind composable UI components
+      var h1 = React.createElement('h1', null, 'Hello world!')
+      /*
+        Here we pass three arguments to the create element method:
+          *ElementName
+          *Data in form of attributes and properties
+          *Child element or inner HTML
+      */
+
+
+      //Now to insert the previous object created we need to make use of the ReactDOM object, due to this has methods for DOM rendering (devolver, pasar, entregar) as well as for server-side rendering
+      ReactDOM.render(
+        h1,
+        document.getElementById('content')
+      )
+      // Usage without the h1 variable
+      // ReactDOM.render(
+      //   React.createElement('h1', null, 'Hello world!'),
+      //   document.getElementById('content')
+      // )
+    </script>
+  </body>
+</html>
