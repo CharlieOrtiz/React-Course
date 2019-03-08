@@ -1,0 +1,29 @@
+{
+  "name": "reactquickly",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build-method": "./node_modules/.bin/babel ch03/method/jsx/script.jsx -o ch03/method/js/script.js -w",
+    "build-hello-js-world-jsx": "./node_modules/.bin/babel ch03/hello-js-world-jsx/jsx/scrpt.jsx -o ch03/hello-js-world-jsx/js/script.js -w",
+    "build-hello-world-jsx": "./node_modules/.bin/babel ch03/hello-world-jsx/jsx/script.jsx -o ch03/hello-world-jsx/js/script.js -w",
+    "build-hello-world-class-jsx": "./node_modules/.bin/babel ch03/hello-world-class-jsx/jsx/script.jsx -o ch03/hello-world-class-jsx/js/script.js -w",
+    "build-clock": "./node_modules/.bin/babel ch04/clock/jsx -d ch04/clock/js -w",
+    "build-clock-es6": "./node_modules/.bin/babel ch04/clock-es6/jsx -d ch04/clock-es6/js -w",
+    "build-clock-analog-digital": "./node_modules/.bin/babel ch04/clock-analog-digital/jsx -d ch04/clock-analog-digital/js -w",
+    "build": "npm run build-method & npm run build-hello-js-world-jsx & npm run build-hello-world-jsx & npm run build-hello-world-class-jsx & npm run build-clock & npm run build-clock-es6 & npm run build-clock-analog-digital"
+  },
+  "author": "Carlos Ortiz",
+  "license": "ISC",
+  "babel": {
+    "presets": [
+      "react"
+    ]
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-react": "^6.5.0",
+    "gulp-babel": "^8.0.0"
+  }
+}
