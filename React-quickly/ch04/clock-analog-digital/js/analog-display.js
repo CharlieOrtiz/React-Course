@@ -1,5 +1,12 @@
-const AnalogDisplay = function (props) {
-  let date = new Date(props.time);
+//This is a stateless component, they return an element without any render method.
+//They can be defined as functions or classes but most of the times are defined as functions, in this way you avoid to add any state in the future
+//They don't use states and methods inside
+function AnalogDisplay(props) {
+  //We convert the property as a Date Object, due to this one it taken as a string
+  let date = new Date(props.time); //We acces to the property, provided as a parameter in the function, as props.time
+
+  //Start CSS properties, as we know, these are defined as Objects in React and written as camelCase
+  //General Styles
   let dialStyle = {
     position: 'relative',
     top: 0,
@@ -9,16 +16,16 @@ const AnalogDisplay = function (props) {
     borderRadius: 20000,
     borderStyle: 'solid',
     borderColor: 'black'
-  };
-  let secondHandStyle = {
+    //Second hand style
+  };let secondHandStyle = {
     position: 'relative',
     top: 100,
     left: 100,
     border: '1px solid red',
     width: '40%',
     height: 1,
-    transform: 'rotate(' + (date.getSeconds() / 60 * 360 - 90).toString() + 'deg)',
-    transformOrigin: '0% 0%',
+    transform: 'rotate(' + (date.getSeconds() / 60 * 360 - 90).toString() + 'deg)', //Due to date variable is a Date Object we can have acces to getSeconds method and any other similar method, after getting the seconds we convert them into a string value to just concatenate the value with the property value in CSS, ending up being a degree value
+    transformOrigin: '0% 0%', //Colocates the central point to the center of the element
     backgroundColor: 'red'
   };
   let minuteHandStyle = {
@@ -54,4 +61,4 @@ const AnalogDisplay = function (props) {
       React.createElement('div', { style: hourHandStyle })
     )
   );
-};
+}

@@ -1,3 +1,4 @@
+//This is a stateful component
 class Clock extends React.Component {
   constructor(props) {
     super(props);
