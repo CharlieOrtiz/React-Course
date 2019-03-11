@@ -12,6 +12,10 @@
     "build-clock": "./node_modules/.bin/babel ch04/clock/jsx -d ch04/clock/js -w",
     "build-clock-es6": "./node_modules/.bin/babel ch04/clock-es6/jsx -d ch04/clock-es6/js -w",
     "build-clock-analog-digital": "./node_modules/.bin/babel ch04/clock-analog-digital/jsx -d ch04/clock-analog-digital/js -w",
+    "build-did-mount": "./node_modules/.bin/babel ch05/did-mount/jsx -d ch05/did-mount/js -w",
+    "build-logger": "./node_modules/.bin/babel ch05/logger/jsx -d ch05/logger/js -w",
+    "build-note": "./node_modules/.bin/babel ch05/note/jsx -d ch05/note/js -w",
+    "build-users": "./node_modules/.bin/babel ch05/users/jsx -d ch05/users/js -w",
     "build": "npm run build-method & npm run build-hello-js-world-jsx & npm run build-hello-world-jsx & npm run build-hello-world-class-jsx & npm run build-clock & npm run build-clock-es6 & npm run build-clock-analog-digital"
   },
   "author": "Carlos Ortiz",
