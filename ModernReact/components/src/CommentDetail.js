@@ -1,19 +1,17 @@
 import React from 'react';
-//Importar faker library to generate fake content
-import faker from 'faker';
 
-const CommentDetail = () => {
+const CommentDetail = props => {
     return(
         <div className="comment">
             <a href="/" className="avatar">
-                <img alt="avatar" src={faker.image.avatar()} /> {/* Here we get a faker image */}
+                <img alt="avatar" src={props.image} /> {/* Here we get a faker image */}
             </a>
             <div className="content">
-                <a href="/" className="author">Sam</a>
+                <a href="/" className="author">{props.author}</a>
                 <div className="metadata">
-                    <span className="date">Today at 6:00PM</span>
+                    <span className="date">{props.timeAgo}</span>
                 </div>
-                <div className="text">Nice Blog Post!</div>
+                <div className="text">{props.commentText}</div>
             </div>
         </div>
     )
