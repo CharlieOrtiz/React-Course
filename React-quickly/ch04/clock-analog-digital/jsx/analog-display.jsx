@@ -3,7 +3,7 @@
 //They don't use states and methods inside
 function AnalogDisplay(props) {
   //We convert the property as a Date Object, due to this one it taken as a string
-  let date = new Date(props.time) //We acces to the property, provided as a parameter in the function, as props.time
+  let date = new Date() //We acces to the property, provided as a parameter in the function, as props.time
   
   //Start CSS properties, as we know, these are defined as Objects in React and written as camelCase
   //General Styles
@@ -51,6 +51,7 @@ function AnalogDisplay(props) {
     transformOrigin: '0% 0%',
     backgroundColor: 'grey'
   }
+  console.log(date);
   return <div>
     <div style={dialStyle}>
       <div style={secondHandStyle}/>

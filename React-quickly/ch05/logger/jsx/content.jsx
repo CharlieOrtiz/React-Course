@@ -4,16 +4,16 @@ class Content extends React.Component {
     this.launchClock()
     this.state = {
       counter: 0,
-      currentTime: (new Date()).toLocaleString()
+      currentTime: 0,
     }
   }
   launchClock() {
     setInterval(()=>{
       this.setState({
         counter: ++this.state.counter,
-        currentTime: (new Date()).toLocaleString()
+        currentTime: ++this.state.currentTime
       })
-    }, 1000)
+    }, 5000)
   }
   render() {
     //Here we make the condition that says if the counter property of the state object is greater than 2 then we just render an empty div element if the condition is false we render the <Logger> component with the time attribute equal to the currentTime property of the state

@@ -21,4 +21,4 @@ class Clock extends React.Component {
       <DigitalDisplay time={this.state.currentTime}/>
     </div>
   }
-}
+} 
