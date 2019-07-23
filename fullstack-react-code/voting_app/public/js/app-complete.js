@@ -1,14 +1,15 @@
 /* eslint-disable no-param-reassign, operator-assignment */
 
 class ProductList extends React.Component {
+  //It is possible initialize our state without the constructor() thanks to property initializers (an upcoming feature in EcmaScript)
   state = {
     products: [],
   };
-
+  //Methods that are part of the lifecycle events in React don't need to use arrow functions to be bind to the component
   componentDidMount() {
     this.setState({ products: Seed.products });
   }
-
+  //Custom Methods are bind to the component using just arrow functions
   handleProductUpVote = (productId) => {
     const nextProducts = this.state.products.map((product) => {
       if (product.id === productId) {
