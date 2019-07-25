@@ -2,7 +2,7 @@
 class TimerDashboard extends React.Component {
     render() {
         return (
-            <div className='ui three column centered grid'>>
+            <div className='ui three column centered grid'>
                 <div className="column">
                     <EditableTimerList /> {/* Parent element of every EditableTimer component */}
                     <ToggleTimerForm isOpen={true} /> {/* Here we pass the property isOpen to determine whether to render a "+" or a TimerForm component */} 
@@ -22,14 +22,14 @@ class EditableTimerList extends React.Component {
                     project="Web Domination"
                     elapsed="8986300"
                     runningSince={null}
-                    editFormOpen={false} //This property determine whether to render the TimerForm component or just the Timer component
+                    editFormOpen={true} //This property determine whether to render the TimerForm component or just the Timer component
                 />
                 <EditableTimer
                     title="Learn extreme ironing"
                     project="World domination"
                     elapsed="3890985"
                     runningSince={null}
-                    editFormOpen={true}
+                    editFormOpen={false}
                 />
             </div>
         );
@@ -91,3 +91,63 @@ class TimerForm extends React.Component {
         )
     }
 }
+
+//Component that represents the plus icon button or the TimeForm component depending on the isOpen property value
+class ToggleTimerForm extends React.Component {
+    render() {
+        if (this.props.isOpen) {
+            return (
+                <TimerForm/>
+            );
+        } else {
+            return (
+                <div className="ui basic content aligned segment">
+                    <button className="ui basic button icon">
+                        <i className="plus icon"/>
+                    </button>
+                </div>
+            );
+        }
+    }
+}
+
+//This is our principal component, where the task are and where the time is running
+class Timer extends React.Component {
+    render() {
+        //According with the elapsed property provided by EditableTimer we pass it as an argument to the renderElapsed function that is inside helpers.js returning us the standar format to see Hours, Minutes and seconds (HH:MM:SS)
+        const elapsedSrting = helpers.renderElapsedString(this.props.elapsed); 
+        return (
+            <div className="ui centered card">
+                <div className="content">
+                    <div className="header">
+                        {this.props.title}
+                    </div>
+                    <div className="meta">
+                        {this.props.project}
+                    </div>
+                    <div className="center aligned description">
+                        <h2>
+                            {elapsedSrting}
+                        </h2>
+                    </div>
+                    <div className="extra content">
+                        <span className="right floated edit icon">
+                            <i className="edit icon" />
+                        </span>
+                        <span className="right floated trash icon">
+                            <i className="trash icon" />
+                        </span>
+                    </div>
+                </div>
+                <div className="ui bottom attached blue basic button">
+                    Start
+                </div>
+            </div>
+        );
+    }
+}
+
+ReactDOM.render(
+    <TimerDashboard/>,
+    document.getElementById('content')
+);
