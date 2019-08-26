@@ -1,22 +1,16 @@
 [
     {
-        "title": "Mow the lawn",
-        "project": "House Chores",
-        "elapsed": 5456099,
-        "id": "0a4a79cb-b06d-4cb1-883d-549a1e3b66d7"
+        "title": "Make server requestes",
+        "project": "Web project",
+        "id": "162c8883-281e-492f-b2c4-352dbe9c092a",
+        "elapsed": 101799,
+        "runningSince": null
     },
     {
-        "title": "Clear paper jam",
-        "project": "Office Chores",
-        "elapsed": 1273998,
-        "id": "a73c1d19-f32d-4aff-b470-cea4e792406a",
-        "runningSince": 1456468632194
-    },
-    {
-        "title": "Ponder origins of universe",
-        "project": "Life Chores",
-        "id": "2c43306e-5b44-4ff8-8753-33c35adbd06f",
-        "elapsed": 11750,
-        "runningSince": "1456225941911"
+        "title": "Mobile components",
+        "project": "Mobile project",
+        "id": "562f0135-a662-4519-8c7e-abfea56d7118",
+        "elapsed": 24357,
+        "runningSince": null
     }
 ]

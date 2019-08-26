@@ -24,6 +24,9 @@ class TimerDashboard extends React.Component {
         const t = helpers.newTimer(timer);
 
         this.setState({timers: this.state.timers.concat(t)});
+
+        //Send data to the server
+        client.createTimer(t)
     }
 
     handleEditFormSubmit = (attr) => {
@@ -42,7 +45,9 @@ class TimerDashboard extends React.Component {
                     return timer;
                 }
             })
-        })
+        });
+        //Send data to the server
+        client.updateTimer(attr);
     }
 
     handleTrashClick = (timerId) => {
@@ -53,6 +58,10 @@ class TimerDashboard extends React.Component {
         this.setState({
             timers: this.state.timers.filter((timer) => timer.id !== timerId)
         });
+        //Send data to the server
+        client.deleteTimer(
+            {id: timerId}
+        );
     }
 
     handleStartClick  = (timerId) => {
@@ -75,6 +84,9 @@ class TimerDashboard extends React.Component {
                 }
             })
         })
+
+        //Send the data to the server
+        client.startTimer({id: timerId, start: now});
     }
 
     handleStopClick = (timerId) => {
@@ -95,7 +107,12 @@ class TimerDashboard extends React.Component {
                     return timer;
                 }
             })
-        })
+        });
+
+        //Send the data to the server
+        client.stopTimer(
+            {id: timerId, stop: now}
+        )
     }
 
     render() {
