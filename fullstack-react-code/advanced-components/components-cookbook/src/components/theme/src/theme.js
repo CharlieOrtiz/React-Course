@@ -9,6 +9,7 @@ export const themes = {
     foreground: '#fff',
     background: '#222222'
   }
-};
+}; 
 
+//Creation of the context with an argument as a default value
 export const ThemeContext = React.createContext(themes.dark);
