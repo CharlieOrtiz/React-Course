@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import styles from '../Switch.css';
+import styles from '../Switch.css'; //With webpack we can import CSS files
 
 const CREDITCARD = 'Creditcard';
 const BTC = 'Bitcoin';
@@ -22,14 +22,14 @@ class Switch extends React.Component {
     const cssClasses = [];
 
     if (this.state.payMethod === choice) {
-      cssClasses.push(styles.active); // add .active class
+      cssClasses.push(styles.active); // add .active class //Due to we have imported our Switch file we can access to its styles as if they were objects, e.g. styles.active give us reference to the active class in the Switch file
     }
-
+    console.log(cssClasses);
     return (
       <div
         className='choice'
         onClick={this.select(choice)}
-        className={cssClasses}
+        className={cssClasses} //Here we apply the class name that make reference to the .active class in the Switch file, although it's not the active class name.
       >
         {choice}
       </div>
