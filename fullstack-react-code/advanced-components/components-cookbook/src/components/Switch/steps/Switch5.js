@@ -29,7 +29,7 @@ class Switch extends React.Component {
       <div
         className='choice'
         onClick={this.select(choice)}
-        className={cssClasses} //Here we apply the class name that make reference to the .active class in the Switch file, although it's not the active class name.
+        className={cssClasses} //Here we apply the class name that make reference to the .active style in the Switch file, although it's not the active class name.
       >
         {choice}
       </div>
