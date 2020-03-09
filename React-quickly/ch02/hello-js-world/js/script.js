@@ -8,6 +8,12 @@ class HelloWorld extends React.Component {
   }
 }
 
+class App extends React.Component {
+  render() {
+    <div component={HelloWorld}></div>
+  }
+}
+
 ReactDOM.render(
   React.createElement(
     'div',
