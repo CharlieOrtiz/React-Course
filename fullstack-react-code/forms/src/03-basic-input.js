@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom'
 
 const content = document.createElement('div');
 document.body.appendChild(content);
@@ -8,7 +9,8 @@ module.exports = class extends React.Component {
 
   onFormSubmit = (evt) => {
     evt.preventDefault();
-    console.log(this.refs.name.value);
+    console.log(ReactDOM.findDOMNode(this.refs.name));
+    console.log(this.refs.name);
   };
 
   render() {
