@@ -1,6 +1,5 @@
 import React from 'react';
 import isEmail from 'validator/lib/isEmail';
-import PropTypes from 'prop-types'
 
 const content = document.createElement('div');
 document.body.appendChild(content);
@@ -55,22 +54,28 @@ module.exports = class extends React.Component {
         <h1>Sign Up Sheet</h1>
 
         <form onSubmit={this.onFormSubmit}>
-          <Field
+          <input
             placeholder="Name"
             name="name"
             value={this.state.fields.name}
-            validate={val => val ? false : 'Name Required'}
             onChange={this.onInputChange}
           />
+
+          <span style={{color: 'red'}}>{this.state.fieldErrors.name}</span>
+
           <br />
-          <Field 
-            placeholder="Name"
-            name="name"
-            value={this,state.fields.email}
-            validate={val => (isEmail(val) ? false : 'Invalid Email')}
+
+          <input
+            placeholder="Email"
+            name="email"
+            value={this.state.fields.email}
             onChange={this.onInputChange}
           />
+
+          <span style={{color: 'red'}}>{this.state.fieldErrors.email}</span>
+
           <br />
+
           <input type="submit" />
         </form>
 
@@ -88,46 +93,3 @@ module.exports = class extends React.Component {
     );
   }
 };
-
-class Field extends React.Component {
-  static propTypes = {
-    placeholder: PropTypes.string,
-    name: PropTypes.string.isRequired,
-    value: PropTypes.string,
-    validate: PropTypes.func,
-    onChange: PropTypes.func.isRequired
-  };
-
-  state = {
-    value: this.props.value,
-    error: false
-  };
-
-  //This is a lifecycle function and its work is to update our state when this one depends of a prop value. The function executes every time our component has a instanctiation or when there's an update.
-  getDerivedStateFromProps(nextProps) {
-    return {value: nextProps.value};
-  }
-
-  onChange(e) {
-    const name = this.props.name;
-    const value = e.target.value;
-    const error = this.props.validate ? this.props.validate(value) : false;
-
-    this.setState({value, error});
-
-    this.props.onChange({name, value, error});
-  }
-
-  render() {
-    return (
-      <div>
-        <input 
-            placeholder={this.props.placeholder}
-            value={this.state.value}
-            onChange={this.onChange}
-          />
-          <span style={{color: 'red'}}>{this.state.error}</span>
-      </div>
-    );
-  }
-}

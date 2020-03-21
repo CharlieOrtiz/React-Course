@@ -15,7 +15,7 @@ module.exports = class extends React.Component {
     error: false
   };
 
-  getDerivedStateFromProps(nextProps) {
+  static getDerivedStateFromProps(nextProps) {
     return {value: nextProps.value}
   }
 
@@ -36,6 +36,7 @@ module.exports = class extends React.Component {
           placeholder={this.props.placeholder}
           value={this.state.value}
           onChange={this.onChange}
+          onBlur={this.onChange}
         />
         <span style={{color: 'red'}}>{this.state.error}</span>
       </div>
