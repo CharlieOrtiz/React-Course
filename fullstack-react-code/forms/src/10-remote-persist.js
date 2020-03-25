@@ -170,9 +170,11 @@ apiClient = {
       }
     };
   },
-
+ 
   savePeople: function(people) {
-    const success = !!(this.count++ % 2);
+    //Here we are evaluated that the mod of count is 0(false) or any other number(true). To do this, we make use of the incrementor operator, this one first returns the variable value first and after use it againt this has the value of its first value plus 1.
+    const success = !!(this.count++ % 2); //The first run this.count++ is equal to 1 and about to incremented to 2, then the second run is now equal to 2 and about to incremented to 3.
+   //Also, the ! symbol indicates the oposite of a boolean value, and if we use two of them (!!), the first one indicate the oposite of the parenthesis value !(true) = false, and the second indicates the oposite of the result of the first symbol !(!(true)) = true. 
 
     return new Promise((resolve, reject) => {
       setTimeout(() => {
