@@ -17,13 +17,14 @@ module.exports = class extends React.Component {
   };
 
   state = {
-    department: null,
-    course: null,
+    department: this.props.department,
+    course: this.props.course,
     courses: [],
     _loading: false
   };
 
-  getDerivedStateFromProps(update) {
+  static getDerivedStateFromProps(update) {
+    console.log('1')
     return {
       department: update.department,
       course: update.course
@@ -35,9 +36,9 @@ module.exports = class extends React.Component {
     const course = null;
     this.setState({department, course});
     this.props.onChange({name: 'department', value: department});
-    this.props.onChange({name: 'course', value: course});
+    //this.props.onChange({name: 'course', value: course});
 
-    if (department) this.fetch(department);
+    if (department) this.fetch(department); //We call fetch method, defined inside this class component
   };
 
   onSelectCourse = evt => {
@@ -48,6 +49,7 @@ module.exports = class extends React.Component {
 
   fetch = department => {
     this.setState({_loading: true, courses: []});
+    //apiClient is a function outside our class and just returns an object with a 'then' method property inside it. This 'then' method property is called just inmediatly as we can see below, with a function as an argument to update the state, this function is called inside the 'then' method, where we can find it as cb() and then proceed to pass to correct values to update state.
     apiClient(department).then(courses => {
       this.setState({_loading: false, courses: courses});
     });

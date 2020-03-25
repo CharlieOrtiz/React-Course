@@ -46,7 +46,6 @@ module.exports = class extends React.Component {
 
     fields[name] = value;
     fieldErrors[name] = error;
-
     this.setState({fields, fieldErrors});
   };
 
