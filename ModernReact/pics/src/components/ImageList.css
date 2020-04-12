@@ -1,8 +1,8 @@
 .image-list {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    grid-gap: 10px;
-    grid-auto-rows: 150px; /*Declares the height of every row*/
+    grid-gap: 0 10px;
+    grid-auto-rows: 10px; /*Declares the height of every row*/
 }
 /*grid-template-columns declare the number and width of the columns that our grid dysplay is going to have. In this case repeat(auto-fill) indicates the number of columns that can be around the screen and with the auto-fill value our css system will decide how many columns can exist in the screen depending on the width of each other, to declare this we add a minmax value with 250px and 1fr, 250 defines the minimal value of every column while 1fr indicates that every column has to be with the same width as a maximum value.
 Grid-grap property indicates the space between every culumn and row.
@@ -10,4 +10,5 @@ Grid-grap property indicates the space between every culumn and row.
 
 .image-list img {
     width: 250px;
+    grid-row-end: span 2;
 }
