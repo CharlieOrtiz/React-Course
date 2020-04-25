@@ -80,5 +80,43 @@ describe('App', () => {
         ).toBe(true);
       });
     });
+
+    describe('and then submits the form', () => {
+      beforeEach(() => {
+        const form = wrapper.find('form').first();
+
+        form.simulate('submit', {
+          preventDefault: ()=>{}
+        })
+      });
+
+      it('should update  state property `items`', () => {
+        expect(
+          wrapper.state().items
+        ).toContain(item);
+      });
+
+      it('should render method have `item`', () => {
+        expect(
+        wrapper.containsMatchingElement(<td>{item}</td>)
+        ).toBe(true);
+      });
+
+      it('clears the input', () => {
+        const input = wrapper.find('input').first(); //We get the actual input after the submit
+
+        expect(
+          input.props().value
+        ).toEqual('');
+      });
+
+      it('should disabled the button', () => {
+        const button = wrapper.find('button').first(); //We get the actual button after the submit
+
+        expect(
+          button.props().disabled
+        ).toBe(true);
+      });
+    });
   });
 }); 
