@@ -23,6 +23,6 @@
     "client": "babel-node start-client.js"
   },
   "devDependencies": {
-    "concurrently": "3.1.0"
+    "concurrently": "^3.1.0"
   }
 }
