@@ -3,6 +3,9 @@
 import { shallow } from 'enzyme';
 import React from 'react';
 import FoodSearch from '../FoodSearch';
+import Client from '../Client';
+
+jest.mock('../Client');
 
 describe('FoodSearch', () => {
   // ... initial state specs
@@ -11,6 +14,10 @@ describe('FoodSearch', () => {
     wrapper = shallow(
       <FoodSearch/>
     );
+  });
+
+  afterEach(() => {
+    Client.search.mockClear();
   });
 
   it('should not display the remove icon', () => {
@@ -47,6 +54,20 @@ describe('FoodSearch', () => {
       expect(
         wrapper.find('.remove.icon').length
       ).toBe(1);
+    });
+
+    /*it('...todo...', () => {
+      const firstInvocation = Client.search.mock.calls[0];
+
+      console.log('First Invocation:', firstInvocation);
+      console.log('All Invocations:', Client.search.mock.calls);
+    })*/
+
+    it('should call `Client.search()` with `value`', () => {
+      const clientArgs = Client.search.mock.calls[0];
+      expect(
+        clientArgs[0]
+      ).toEqual(value);
     });
 
     describe('and API returns results', () => {
