@@ -8,11 +8,14 @@ import Client from '../Client';
 jest.mock('../Client');
 
 describe('FoodSearch', () => {
+  const onFoodClick = jest.fn(); //Mock function to test that it's called with the correct argument (we use it as prop) 
   // ... initial state specs
   let wrapper;
   beforeEach(() => {
     wrapper = shallow(
-      <FoodSearch/>
+      <FoodSearch
+        onFoodClick = {onFoodClick}
+      />
     );
   });
 
@@ -113,7 +116,7 @@ describe('FoodSearch', () => {
       it('should render the description of first food', () => {
         expect(
         wrapper.html() //returns all the html as string
-        ).toContain(foods[0].description);
+        ).toContain(foods[0].description); //Validating that the correct text is the tree snapshot
       });
       
       it('should render the description of second food', () => {
@@ -126,9 +129,18 @@ describe('FoodSearch', () => {
       describe('then user clicks food item', () => {
         beforeEach(() => {
           // ... simulate user clicking food item
+          const foodRow = wrapper.find('tbody tr').first();
+
+          foodRow.simulate('click'); //Not necessary to write the event object, we're not using it inside the event (we just write the event object when we are using it inside the event function)
         });
 
         // ... specs
+        it('should call prop onFoodClick with the arg equal to first element of foods', () => {
+          expect(
+            onFoodClick.mock.calls[0][0] //the onFoodClick mock gets called in the simulate click event, here we are just getting the first argument of the first call
+          ).toEqual(foods[0]);  
+        });
+
       });
 
       describe('then user types more', () => {
