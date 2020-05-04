@@ -1,5 +1,16 @@
 import React from 'react';
 
+const Route = ({path, component: Component}) => {
+  const pathname = window.location.pathname; //The window object; here we're accesing to the pathname (the directions after the hostname)
+  if(pathname.match(path)) {
+    return (
+      <Component/>
+      );
+  } else {
+    return null;
+  }
+}
+
 class App extends React.Component {
   render() {
     return (
@@ -12,12 +23,12 @@ class App extends React.Component {
 
         <ul>
           <li>
-            <a href='/atlantic'>
+            <a href='/atlantic'> {/* Every time user clicks on atlantic anchor, Pathname is equal to /atlantic */}
               <code>/atlantic</code>
             </a>
           </li>
           <li>
-            <a href='/pacific'>
+            <a href='/pacific'> {/* Every time user clicks on pacific, Pathname is equal to /pacific */}
               <code>/pacific</code>
             </a>
           </li>
@@ -25,7 +36,10 @@ class App extends React.Component {
 
         <hr />
 
-        {/* We'll insert the Route components here */}
+        {/* We'll insert the Route components here */} 
+        <Route path='/atlantic' component={Atlantic} /> {/* When we pass a component as a property, we don't instantiate it we just pass the function variable */}
+        <Route path='/pacific' component={Pacific} />
+
       </div>
     );
   }
