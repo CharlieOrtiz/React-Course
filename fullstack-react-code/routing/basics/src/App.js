@@ -1,5 +1,10 @@
 import React from 'react';
+//Import the createBrowserHistory mtehod to get the history object, in this case this history object has some special methods not included in the browser API provided by HTML5 and prevent us to any incompatibility in the different browsers 
+import { createBrowserHistory } from 'history'
 
+const history = createBrowserHistory() //Get the history object
+
+//Component that determines what to render according with the location (URL) of our app.
 const Route = ({path, component: Component}) => {
   const pathname = window.location.pathname; //The window object; here we're accesing to the pathname (the directions after the hostname)
   if(pathname.match(path)) {
@@ -11,7 +16,26 @@ const Route = ({path, component: Component}) => {
   }
 }
 
+//Component that change the location of our App without any browser request to the server.
+const Link = ({to, children}) => {
+  return (
+    <a onClick={(e) => {
+      e.preventDefault(); //PreventDefault deletes any page freshing
+      history.push(to); //Change the actual history stack and also updates the URL
+    }}
+      href={to}
+    >
+      {children}
+    </a>
+  );
+}
+
 class App extends React.Component {
+  componentDidMount() {
+    //Now that our app is not refreshing we need a way to attach a re-render, in order to do that we use history.listen() to invoke it any time the history stack is changed, this method accepts a function as an argument in this time we define the react method forceUpdate().
+    history.listen(() => this.forceUpdate());
+  }
+
   render() {
     return (
       <div
@@ -23,14 +47,14 @@ class App extends React.Component {
 
         <ul>
           <li>
-            <a href='/atlantic'> {/* Every time user clicks on atlantic anchor, Pathname is equal to /atlantic */}
+            <Link to='/atlantic'> 
               <code>/atlantic</code>
-            </a>
+            </Link>
           </li>
           <li>
-            <a href='/pacific'> {/* Every time user clicks on pacific, Pathname is equal to /pacific */}
+            <Link to='/pacific'> 
               <code>/pacific</code>
-            </a>
+            </Link>
           </li>
         </ul>
 
