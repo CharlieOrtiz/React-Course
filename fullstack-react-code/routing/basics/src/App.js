@@ -39,6 +39,18 @@ const Link = ({to, children}) => {
   </RouterContext.Consumer>
 }
 
+class Redirect extends React.Component {
+
+  render() {
+    return <RouterContext.Consumer>
+      { ({history}) => {
+        history.push(this.props.to);
+        return null
+      }}
+    </RouterContext.Consumer>
+  }
+}
+
 class Router extends React.Component {
   //State equal to the defaul context value
   state = {
@@ -101,6 +113,11 @@ class App extends React.Component {
                 <code>/pacific</code>
               </Link>
             </li>
+            <li>
+              <Link to='/black-sea'> 
+                <code>/black-sea</code>
+              </Link>
+            </li>
           </ul>
 
           <hr />
@@ -108,6 +125,7 @@ class App extends React.Component {
           {/* We'll insert the Route components here */} 
           <Route path='/atlantic' component={Atlantic} /> {/* When we pass a component as a property, we don't instantiate it we just pass the function variable */}
           <Route path='/pacific' component={Pacific} />
+          <Route path='/black-sea' component={BlackSea} />
 
         </div>
       </Router>
@@ -134,5 +152,38 @@ const Pacific = () => (
     </p>
   </div>
 );
+
+class BlackSea extends React.Component {
+  state = {
+    counter: 3
+  }
+
+  componentDidMount() {
+    this.interval = setInterval(() => {
+      this.setState((prevState) => {
+        return {
+          counter: prevState.counter - 1
+        }
+      });
+    }, 1000)
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.interval);
+  }
+
+  render () {
+    return (
+      <div>
+        <h3>Black Sea</h3>
+        <p>Nothing to sea [sic] here ...</p>
+        <p>Redirecting in {this.state.counter}</p>
+        {
+          (this.state.counter < 1) ? <Redirect to='/'/> : null 
+        }
+      </div>
+    )
+  }
+}
 
 export default App;
