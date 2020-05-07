@@ -1,99 +1,18 @@
 import React from 'react';
-//Import the createBrowserHistory mtehod to get the history object, in this case this history object has some special methods not included in the browser API provided by HTML5 and prevent us to any incompatibility in the different browsers 
-import { createBrowserHistory } from 'history'
-//Variable use to define our context and define our Router state
-const contextObject = {
-  history: createBrowserHistory(),
-  location: window.location
-};
-const RouterContext = React.createContext(contextObject); //The defaul value. In case that one of our components is not inside a provider then its consumer (if it's using) will take this value)
 
-//Component that determines what to render according with the location (URL) of our app.
-const Route = ({path, component: Component}) => {
-  return <RouterContext.Consumer>
-    { ({location: {pathname}}) => {
-      if(pathname.match(path)) {
-        return <Component/>
-      } else {
-        return null;
-      }
-    }}
-  </RouterContext.Consumer>
-}
+import {
+  BrowserRouter as Router,
+  Route,
+  Link,
+  Redirect,
+} from 'react-router-dom';
 
-//Component that change the location of our App without any browser request to the server.
-const Link = ({to, children}) => {
-  return <RouterContext.Consumer>
-    { ({history}) => {
-      return (
-        <a onClick={(e) => {
-          e.preventDefault(); //PreventDefault deletes any page freshing
-          history.push(to); //Change the actual history stack and also updates the URL
-        }}
-          href={to}
-        >
-          {children}
-        </a>
-      )
-    }}
-  </RouterContext.Consumer>
-}
-
-class Redirect extends React.Component {
-
-  render() {
-    return <RouterContext.Consumer>
-      { ({history}) => {
-        history.push(this.props.to);
-        return null
-      }}
-    </RouterContext.Consumer>
-  }
-}
-
-class Router extends React.Component {
-  //State equal to the defaul context value
-  state = {
-    apis: contextObject
-  }
-  //Use componentDidMount to declare the listen method from history, this will change our state and invokes a re-render
-  componentDidMount() {
-    //When the listen method will be invoked it's going to change our state value equal to the actual history stack and then makes a re-render to mount the provider with the updated value
-    this.state.apis.history.listen(() => {
-      this.setState({
-        apis: {
-          history: createBrowserHistory(),
-          location: window.location
-        }
-      });
-    });
-  }
-  //Because componentDidMount just is attached one time during the lifecycle we need to declare the listen method again after the first update made by the componentDidMount
-  componentDidUpdate() {
-    this.state.apis.history.listen(() => {
-      this.setState({
-        apis: {
-          history: createBrowserHistory(),
-          location: window.location
-        }
-      });
-    });
-  }
- 
-  render() {
-    return (
-      //Use context provider with a value equal to state to pass it to the rest of the child components, in this case Route and Link
-      <RouterContext.Provider value={this.state.apis}>
-        {this.props.children}
-      </RouterContext.Provider>
-    );
-  }
-}
+//When we are using the react router library we can use our imported components with some special functions, you can notice that having at the top our Router component we provide the HTML 5 Broweser API to keep our components in sync, other features are properties like to, path, render and exact used by the Router components
 
 class App extends React.Component {
   render() {
     return (
-      <Router>
+      <Router> 
         
         <div
           className='ui text container'
@@ -122,10 +41,25 @@ class App extends React.Component {
 
           <hr />
 
+          <Route path='/atlantic/ocean' render={() => ( //Render property let us make an in-line render component, instead of using the component property
+            <div>
+              <h3>Atlantic Ocean - Again!</h3>
+              <p>
+                Also known as "The Pond."
+              </p>
+            </div>
+          )}/>
+
           {/* We'll insert the Route components here */} 
           <Route path='/atlantic' component={Atlantic} /> {/* When we pass a component as a property, we don't instantiate it we just pass the function variable */}
           <Route path='/pacific' component={Pacific} />
           <Route path='/black-sea' component={BlackSea} />
+
+          <Route exact path='/' render={() => { //exact property let us make an extact matched with the browser path, with this we avoid errors like having two different component rendering in the same browser location 
+            return <h3>
+              Welcome! Select a body of saline water above.
+            </h3>
+          }}/>
 
         </div>
       </Router>
