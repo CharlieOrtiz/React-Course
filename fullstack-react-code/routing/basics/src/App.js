@@ -5,6 +5,7 @@ import {
   Route,
   Link,
   Redirect,
+  Switch,
 } from 'react-router-dom';
 
 //When we are using the react router library we can use our imported components with some special functions, you can notice that having at the top our Router component we provide the HTML 5 Broweser API to keep our components in sync, other features are properties like to, path, render and exact used by the Router components
@@ -40,26 +41,37 @@ class App extends React.Component {
           </ul>
 
           <hr />
+        
+          <Switch>
+            <Route path='/atlantic/ocean' render={() => ( //Render property let us make an in-line render component, instead of using the component property
+              <div>
+                <h3>Atlantic Ocean - Again!</h3>
+                <p>
+                  Also known as "The Pond."
+                </p>
+              </div>
+            )}/>
 
-          <Route path='/atlantic/ocean' render={() => ( //Render property let us make an in-line render component, instead of using the component property
-            <div>
-              <h3>Atlantic Ocean - Again!</h3>
-              <p>
-                Also known as "The Pond."
-              </p>
-            </div>
-          )}/>
+            {/* We'll insert the Route components here */} 
+            <Route path='/atlantic' component={Atlantic} /> {/* When we pass a component as a property, we don't instantiate it we just pass the function variable */}
+            <Route path='/pacific' component={Pacific} />
+            <Route path='/black-sea' component={BlackSea} />
 
-          {/* We'll insert the Route components here */} 
-          <Route path='/atlantic' component={Atlantic} /> {/* When we pass a component as a property, we don't instantiate it we just pass the function variable */}
-          <Route path='/pacific' component={Pacific} />
-          <Route path='/black-sea' component={BlackSea} />
+            <Route exact path='/' render={() => { //exact property let us make an extact matched with the browser path, with this we avoid errors like having two different component rendering in the same browser location 
+              return <h3>
+                Welcome! Select a body of saline water above.
+              </h3>
+            }}/>
 
-          <Route exact path='/' render={() => { //exact property let us make an extact matched with the browser path, with this we avoid errors like having two different component rendering in the same browser location 
-            return <h3>
-              Welcome! Select a body of saline water above.
-            </h3>
-          }}/>
+            <Route render={({location}) => (
+              <div className='ui inverted red segment'>
+                <h3>
+                  Error! No matches for <code>{location.pathname}</code>
+                </h3>
+              </div>
+            )} />
+          </Switch>
+
 
         </div>
       </Router>
