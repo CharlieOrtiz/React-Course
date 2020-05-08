@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-
+import { Route } from 'react-router-dom';
 import Album from './Album';
 import { client } from '../Client';
+import VerticalMenu from './VerticalMenu';
 
 const ALBUM_IDS = [
   '23O4F21GDWiGd33tFN3ZgI',
@@ -44,18 +45,27 @@ class AlbumsContainer extends Component {
             className='ui six wide column'
             style={{ maxWidth: 250 }}
           >
-            {/* VerticalMenu will go here */}
+            { //We're displaying VerticalMenu with information about every album, that's the reason we pass the name and id of every album as an array object
+              <VerticalMenu albums={this.state.albums.map(album => {
+                return {
+                  name: album.name, 
+                  id: album.id
+                }
+              })} />
+            }
           </div>
           <div className='ui ten wide column'>
-            {
-              this.state.albums.map((a) => (
-                <div
-                  className='row'
-                  key={a.id}
-                >
-                  <Album album={a} />
-                </div>
-              ))
+            { //The route path specifies a param as albumId, this path is going to be match with any similar URL structure
+              <Route path='/albums/:albumId' render={({match}) => {
+                //What is going to be strict is the Album component, wich one we pass the album variable containing the album object that match with the albumId param from the URL
+                const album = this.state.albums.find(
+                  (a) =>  a.id === match.params.albumId 
+                )
+
+                return ( 
+                  <Album album={album}/>
+                );
+              }} />
             }
           </div>
         </div>
