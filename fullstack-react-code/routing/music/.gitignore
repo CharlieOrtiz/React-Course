@@ -1,2 +1,4 @@
 
 tests_output/*
+#dependencies
+node_modules
