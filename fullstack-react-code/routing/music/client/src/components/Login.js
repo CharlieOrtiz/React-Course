@@ -18,10 +18,19 @@ class Login extends Component {
     });
   }
 
+  redirectPath = () => {
+    const locationState = this.props.location.state;
+    const pathname = (
+      locationState && locationState.from && locationState.from.pathname //We need to know that two values being evaluated by the && operator, if one of them is false (null, undefined, 0 or empty) then that value is returned by the evaluation, if the two are true it returns the second value or the last one
+    );
+
+    return pathname || '/albums' //On the other hand, two values being evaluated by || operator, if one of them is false, then our evaluation returns the true one and if the two are true it returns the frist value
+  }
+
   render() {
     if (this.state.shouldRedirect) {
       return (
-        <Redirect to='/albums' />
+        <Redirect to={this.redirectPath()} />
       );
     } else {
       return (
