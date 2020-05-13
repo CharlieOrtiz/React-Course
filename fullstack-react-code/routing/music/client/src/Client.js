@@ -14,7 +14,7 @@ const LOCAL_STORAGE_KEY = 'fsr-spotify-fake-auth';
 
 class Client {
   constructor() {
-    this.useLocalStorage = (typeof localStorage !== 'undefined');
+    this.useLocalStorage = (typeof localStorage !== 'undefined'); //This codition is true, localStorage is an Object type and the condition success due to Object is different from undefined
     this.subscribers = [];
 
     if (this.useLocalStorage) {
