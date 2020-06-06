@@ -9,8 +9,22 @@ function reducer(state, action) {
       id: uuid.v4(),
       timestamp: Date.now(),
     }
+    //find the Index of the thread where we are going to add our new message
+    const threadIndex = state.threads.findIndex((thread) => thread.id === action.threadId);
+    //Create a new thread object based in the original thread where we want to add our new message
+    const oldThread = state.threads[threadIndex];
+    const newThread = {
+      ...oldThread,
+      messages: oldThread.messages.concat(newMessage),
+    };
+    //Return a new state object based in the old state and at the same time adding the new Thread object
     return {
-      messages: state.messages.concat(newMessage),
+      ...state,
+      threads: [ //Slice returns a new array that goes from the index elements specify in the parameters, and the spread operator just add the elements, inside of the new array, to the threads array 
+        ...state.threads.slice(0, threadIndex), //Add the threads that are before the new one
+        newThread,
+        ...state.threads.slice(threadIndex + 1, state.threads.length) //Add the threads that are after the new one
+      ]
     };
   } else if (action.type === 'DELETE_MESSAGE') {
     return {
@@ -117,7 +131,7 @@ class Thread extends React.Component {
         <div className='ui comments'>
           {messages}
         </div>
-        <MessageInput/>
+        <MessageInput threadId={this.props.thread.id}/>
       </div>
     );
   }
@@ -138,6 +152,7 @@ class MessageInput extends React.Component {
     store.dispatch({
       type: 'ADD_MESSAGE',
       text: this.state.value,
+      threadId: this.props.threadId,
     });
     this.setState({
       value: '',
