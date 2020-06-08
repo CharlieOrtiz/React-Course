@@ -10,54 +10,74 @@ function activeThreadIdReducer(state, action) {
   }
 }
 
+//As this function just take care of the threads property, we use another one to delegate managment for messages property and one more to get the thread index that we're going to use to change our messages property
 function threadsReducer(state, action) {
-  if (action.type === 'ADD_MESSAGE') {
-    const newMessage = {
-      text: action.text,
-      id: uuid.v4(),
-      timestamp: Date.now(),
+  switch (action.type) {
+    case 'ADD_MESSAGE':
+    case 'DELETE_MESSAGE': {
+      //find the Index of the thread where we are going to add our new message
+      const threadIndex = findThreadIndex(state, action);
+      //Create a new thread object based in the original thread where we want to add our new message
+      const oldThread = state[threadIndex];
+      const newThread = {
+        ...oldThread,
+        messages: messagesReducer(oldThread.messages, action), //Here we're using a function to take responsability for the messages property and keep the single responsability patter
+      };
+      //Return a new state object based in the old state and at the same time adding the new Thread object
+      return [ //Slice returns a new array that goes from the index elements specify in the parameters, and the spread operator just add the elements, inside of the new array, to the threads array 
+          ...state.slice(0, threadIndex), //Add the threads that are before the new one
+          newThread,
+          ...state.slice(threadIndex + 1, state.length) //Add the threads that are after the new one
+        ]
     }
-    //find the Index of the thread where we are going to add our new message
-    const threadIndex = state.findIndex((thread) => thread.id === action.threadId);
-    //Create a new thread object based in the original thread where we want to add our new message
-    const oldThread = state[threadIndex];
-    const newThread = {
-      ...oldThread,
-      messages: oldThread.messages.concat(newMessage),
-    };
-    //Return a new state object based in the old state and at the same time adding the new Thread object
-    return [ //Slice returns a new array that goes from the index elements specify in the parameters, and the spread operator just add the elements, inside of the new array, to the threads array 
-        ...state.slice(0, threadIndex), //Add the threads that are before the new one
-        newThread,
-        ...state.slice(threadIndex + 1, state.length) //Add the threads that are after the new one
-      ]
-  } else if (action.type === 'DELETE_MESSAGE') {
-    //Find the thread index where it is the message that we want deleted.
-    const threadIndex = state.findIndex((thread) => (
-      thread.messages.find((m) => (m.id === action.id))
-    ));
-    //Get the thread object which one is going to be used to create the new thread object
-    const oldThread = state[threadIndex];
-    //Create a new thread and overwrite messages deleting the message that our action is requesting
-    const newThread = {
-      ...oldThread,
-      messages: oldThread.messages.filter((m) => m.id !== action.id),
-    };
-    //Return a new state object based in the old state and at the same time adding the new Thread object
-    return [
-        ...state.slice(0, threadIndex),
-        newThread,
-        ...state.slice(threadIndex + 1, state.length)
-      ]
-  } else {
-    return state;
+
+    default: {
+      return state;
+    }
   }
 }
 
+function findThreadIndex(state, action) {
+  switch(action.type) {
+    case 'ADD_MESSAGE': {
+      return state.findIndex((thread) => thread.id === action.threadId);
+    } 
+
+    case 'DELETE_MESSAGE': {
+      return state.findIndex((thread) => (
+        thread.messages.find((m) => (m.id === action.id))
+      ));
+    }
+  }
+}
+
+function messagesReducer(state, action) {
+  switch(action.type) {
+    case 'ADD_MESSAGE': {
+      const newMessage = {
+        text: action.text,
+        timestamp: Date.now(),
+        id: uuid.v4(),
+      };
+  
+      return state.concat(newMessage);
+    }
+
+    case 'DELETE_MESSAGE': {
+      return state.filter((m) => m.id !== action.id);
+    }
+
+    default: {
+      return state;
+    }
+  }
+}
+
+//Notice how we use the single responsability pattern in activeThreadIdReducer and threadsReducer functions, each of these functions just take care of a single property from state.
 function reducer(state, action) {
   return {
-    activeThreadId: activeThreadIdReducer(state.activeThreadId, action),
-    threads: threadsReducer(state.threads, action),
+    activeThreadId: activeThreadIdReducer(state.activeThreadId, action), //Just take care of activeThreadId property
+    threads: threadsReducer(state.threads, action), //Just take care of threads property
   }
 }
 
