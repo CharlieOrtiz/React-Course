@@ -2,7 +2,7 @@ import React from 'react';
 import {createStore} from 'redux';
 import uuid from 'uuid';
 
-function activeThreadIdReducer(state, action) {
+function activeThreadIdReducer(state='1-fca2', action) {
   if(action.type === 'OPEN_THREAD') {
     return action.id;
   } else {
@@ -11,7 +11,19 @@ function activeThreadIdReducer(state, action) {
 }
 
 //As this function just take care of the threads property, we use another one to delegate managment for messages property and one more to get the thread index that we're going to use to change our messages property
-function threadsReducer(state, action) {
+function threadsReducer(
+  state = [
+      {
+        id: '1-fca2',
+        title: 'Buzz Aldrin',
+        messages: messagesReducer(undefined, {}),
+      },
+      {
+        id: '2-be91',
+        title: 'Michael Collins',
+        messages: messagesReducer(undefined, {}),
+      }
+  ], action) {
   switch (action.type) {
     case 'ADD_MESSAGE':
     case 'DELETE_MESSAGE': {
@@ -51,7 +63,7 @@ function findThreadIndex(state, action) {
   }
 }
 
-function messagesReducer(state, action) {
+function messagesReducer(state=[], action) {
   switch(action.type) {
     case 'ADD_MESSAGE': {
       const newMessage = {
@@ -74,36 +86,14 @@ function messagesReducer(state, action) {
 }
 
 //Notice how we use the single responsability pattern in activeThreadIdReducer and threadsReducer functions, each of these functions just take care of a single property from state.
-function reducer(state, action) {
+function reducer(state={}, action) {
   return {
     activeThreadId: activeThreadIdReducer(state.activeThreadId, action), //Just take care of activeThreadId property
     threads: threadsReducer(state.threads, action), //Just take care of threads property
   }
 }
 
-const initialState = { 
-  activeThreadId: '1-fca2',
-  threads: [
-    {
-      id: '1-fca2',
-      title: 'Buzz Aldrin',
-      messages: [
-        {
-          text: 'Twelve minutes to ignition.',
-          timestamp: Date.now(),
-          id: uuid.v4(),
-        },
-      ]
-    },
-    {
-      id: '2-be91',
-      title: 'Michael Collins',
-      messages: []
-    }
-  ] 
-};
-
-const store = createStore(reducer, initialState);
+const store = createStore(reducer);
 
 class App extends React.Component {
   componentDidMount() {
