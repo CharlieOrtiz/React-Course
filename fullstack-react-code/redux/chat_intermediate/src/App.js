@@ -106,46 +106,56 @@ class App extends React.Component {
     const threads = state.threads;
     const activeThread = threads.find((thread) => activeThreadId === thread.id);
 
-    const tabs = threads.map((t) => (
-      {
-        title: t.title,
-        active: t.id === activeThreadId,
-        id: t.id,
-      }
-    ));
-
     return (
       <div className='ui segment'>
-        <ThreadTabs tabs={tabs}/>
+        <ThreadTabs/>
         <Thread thread={activeThread} />
       </div>
     );
   }
 }
 
+const Tabs = (props) => (
+  <div className='ui top attached tabular menu'>
+    {
+      props.tabs.map((tab, index) => (
+        <div
+          key={index}
+          className={tab.active ? 'active item' : 'item'}
+          onClick={()=>(props.onClick(tab.id))}
+        >
+          {tab.title}
+        </div>
+      ))
+    }
+</div>
+);
+
 class ThreadTabs extends React.Component {
-  handleClick = (id) => {
-    store.dispatch({
-      type: 'OPEN_THREAD',
-      id: id,
-    });
+  componentDidMount() {
+    store.subscribe(() => this.forceUpdate());
   }
 
   render() {
-    const tabs = this.props.tabs.map((tab, index) => (
-      <div
-        key={index}
-        className={tab.active ? 'active item' : 'item'}
-        onClick={() => this.handleClick(tab.id)}
-      >
-        {tab.title}
-      </div>
-    ));
+    const state = store.getState();
 
+    const threadTabs = state.threads.map((tab, index) => {
+      return {
+        title: tab.title,
+        active: tab.id === state.activeThreadId,
+        id: tab.id
+      }
+    });
     return (
-      <div className='ui top attached tabular menu'>
-        {tabs}
-      </div>
+      <Tabs
+        tabs={threadTabs}
+        onClick={(id)=>(
+          store.dispatch({
+            type: 'OPEN_THREAD',
+            id: id,
+          })
+        )}
+      />
     );
   }
 }
