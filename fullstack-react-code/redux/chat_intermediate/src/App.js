@@ -101,36 +101,16 @@ class App extends React.Component {
   }
 
   render() {
-    const state = store.getState();
-    const activeThreadId = state.activeThreadId;
-    const threads = state.threads;
-    const activeThread = threads.find((thread) => activeThreadId === thread.id);
-
     return (
       <div className='ui segment'>
         <ThreadTabs/>
-        <Thread thread={activeThread} />
+        <ThreadDisplay/>
       </div>
     );
   }
 }
 
-const Tabs = (props) => (
-  <div className='ui top attached tabular menu'>
-    {
-      props.tabs.map((tab, index) => (
-        <div
-          key={index}
-          className={tab.active ? 'active item' : 'item'}
-          onClick={()=>(props.onClick(tab.id))}
-        >
-          {tab.title}
-        </div>
-      ))
-    }
-</div>
-);
-
+//Container Component, propagates the thread tabs and the OPEN_THREAD action to Tabs component
 class ThreadTabs extends React.Component {
   componentDidMount() {
     store.subscribe(() => this.forceUpdate());
@@ -159,40 +139,84 @@ class ThreadTabs extends React.Component {
     );
   }
 }
-
-class Thread extends React.Component {
-  handleClick = (id) => {
-    store.dispatch({
-      type: 'DELETE_MESSAGE',
-      id: id,
-    });
-  };
+//Presentational component, reads data provided by ThreadTabs, just displays the markup for each Tab
+const Tabs = (props) => (
+  <div className='ui top attached tabular menu'>
+    {
+      props.tabs.map((tab, index) => (
+        <div
+          key={index}
+          className={tab.active ? 'active item' : 'item'}
+          onClick={()=>(props.onClick(tab.id))}
+        >
+          {tab.title}
+        </div>
+      ))
+    }
+</div>
+);
+//Container Component, propagates the activeThread and the ADD_MESSAGE and DELETE_MESSAGE actions to Thread
+class ThreadDisplay extends React.Component {
+  componentDidMount() {
+    store.subscribe(() => this.forceUpdate());
+  }
 
   render() {
-    const messages = this.props.thread.messages.map((message, index) => (
-      <div
-        className='comment'
-        key={index}
-        onClick={() => this.handleClick(message.id)}
-      >
-        <div className='text'>
-          {message.text}
-          <span className="metadata">@{message.timestamp}</span>
-        </div>
-      </div>
-    ));
+    const state = store.getState();
+    const activeThreadId = state.activeThreadId;
+    const activeThread = state.threads.find((thread) => thread.id === activeThreadId);
+
     return (
-      <div className='ui center aligned basic segment'>
-        <div className='ui comments'>
-          {messages}
-        </div>
-        <MessageInput threadId={this.props.thread.id}/>
-      </div>
+     <Thread
+        thread={activeThread}
+        onMessageClick={(id)=>store.dispatch({
+          type: 'DELETE_MESSAGE',
+          id: id,
+        })}
+        onMessageSubmit={(text) => store.dispatch({
+          type:'ADD_MESSAGE',
+          text: text,
+          threadId: activeThreadId,
+        })}
+     />
     );
   }
 }
+//Presentational component, just display markup, inside that markup we instantiated other two presentational components: MessageList and TextFieldSubmit, these two components receive data provided as props from ThreadDisplay
+const Thread = (props) => (
+  <div className='ui center aligned basic segment'>
+    <MessageList
+      messages={props.thread.messages}
+      onClick={props.onMessageClick}
+    />
+    <TextFieldSubmit
+      onSubmit={props.onMessageSubmit}
+    />  
+  </div>
+);
 
-class MessageInput extends React.Component {
+//Presentational component, just display the messages for a specific Thread, receives the messages data and action behavior from Thread and this one from ThreadDisplay
+const MessageList = (props) => (
+  <div className='ui comments'>
+    {
+      props.messages.map((m, index) => (
+        <div
+          className='comment'
+          key={index}
+          onClick={() => props.onClick(m.id)}
+        >
+          <div className='text'>
+            {m.text}
+            <span className='metadata'>@{m.timestamp}</span>
+          </div>
+        </div>
+      ))
+    }
+  </div>
+);
+
+//Presentational Component, just display the input field to send messages. Receives the behavior from Thread and this one from ThreadDisplay
+class TextFieldSubmit extends React.Component {
   state = {
     value: '',
   };
@@ -204,11 +228,7 @@ class MessageInput extends React.Component {
   };
 
   handleSubmit = () => {
-    store.dispatch({
-      type: 'ADD_MESSAGE',
-      text: this.state.value,
-      threadId: this.props.threadId,
-    });
+    this.props.onSubmit(this.state.value)
     this.setState({
       value: '',
     });
