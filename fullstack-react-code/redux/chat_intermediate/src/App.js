@@ -1,5 +1,6 @@
 import React from 'react';
 import {createStore} from 'redux';
+import {Provider, connect} from 'react-redux';
 import uuid from 'uuid';
 
 function activeThreadIdReducer(state='1-fca2', action) {
@@ -95,50 +96,41 @@ function reducer(state={}, action) {
 
 const store = createStore(reducer);
 
-class App extends React.Component {
-  componentDidMount() {
-    store.subscribe(() => this.forceUpdate());
-  }
-
-  render() {
+const App = () => {
     return (
       <div className='ui segment'>
         <ThreadTabs/>
         <ThreadDisplay/>
       </div>
     );
-  }
 }
 
-//Container Component, propagates the thread tabs and the OPEN_THREAD action to Tabs component
-class ThreadTabs extends React.Component {
-  componentDidMount() {
-    store.subscribe(() => this.forceUpdate());
-  }
+//In this two functions (mapState and mapDispatch) we return an object with the property name that we want to use as prop name in our presentational component and the value that we want to assign to that specific prop
+const mapStateToTabsProps = (state) => {
+  const tabs = state.threads.map((t) => (
+    {
+      title: t.title,
+      active: t.id === state.activeThreadId,
+      id: t.id,
+    }
+  ));
 
-  render() {
-    const state = store.getState();
-
-    const threadTabs = state.threads.map((tab, index) => {
-      return {
-        title: tab.title,
-        active: tab.id === state.activeThreadId,
-        id: tab.id
-      }
-    });
-    return (
-      <Tabs
-        tabs={threadTabs}
-        onClick={(id)=>(
-          store.dispatch({
-            type: 'OPEN_THREAD',
-            id: id,
-          })
-        )}
-      />
-    );
+  return {
+    tabs, //ES6 shortand notation, this means tabs: tabs
   }
-}
+};
+
+const mapDisplatchToTabsProps = (dispatch) => (
+  {
+    onClick: (id) => dispatch({
+      type: 'OPEN_THREAD',
+      id: id,
+    })
+  }
+);
+
+
+
 //Presentational component, reads data provided by ThreadTabs, just displays the markup for each Tab
 const Tabs = (props) => (
   <div className='ui top attached tabular menu'>
@@ -155,6 +147,10 @@ const Tabs = (props) => (
     }
 </div>
 );
+
+//Container Component, propagates the thread tabs and the OPEN_THREAD action to Tabs component
+const ThreadTabs = connect(mapStateToTabsProps, mapDisplatchToTabsProps)(Tabs); //Connect function returns a function that accepts the Presentational component and that function returns our wrapped component (Container Component)
+
 //Container Component, propagates the activeThread and the ADD_MESSAGE and DELETE_MESSAGE actions to Thread
 class ThreadDisplay extends React.Component {
   componentDidMount() {
@@ -254,4 +250,11 @@ class TextFieldSubmit extends React.Component {
   }
 }
 
-export default App;
+const WrappedApp = () => (
+  /*Provider Context, used to have the store variable available around all tree components*/
+  <Provider store={store}> 
+    <App/>
+  </Provider>
+);
+
+export default WrappedApp;
