@@ -96,6 +96,30 @@ function reducer(state={}, action) {
 
 const store = createStore(reducer);
 
+//ACTION CREATORS
+function openThread(id) {
+  return {
+    type: 'OPEN_THREAD',
+    id: id,
+  }
+};
+
+function deleteMessage(id) {
+  return {
+    type: 'DELETE_MESSAGE',
+    id: id,
+  }
+};
+
+function addMessage(text, threadId) {
+  return {
+    type: 'ADD_MESSAGE',
+    text: text,
+    threadId: threadId,
+  }
+};
+
+//COMPONENTS
 const App = () => {
     return (
       <div className='ui segment'>
@@ -122,10 +146,9 @@ const mapStateToTabsProps = (state) => {
 
 const mapDisplatchToTabsProps = (dispatch) => (
   {
-    onClick: (id) => dispatch({
-      type: 'OPEN_THREAD',
-      id: id,
-    })
+    onClick: (id) => (
+      dispatch(openThread(id))
+    ),
   }
 );
 
@@ -163,10 +186,7 @@ const mapStateToPropsThread = (state) => {
 const mapDispatchToPropsThread = (dispatch) => {
   return {
     onMessageClick: (id) => (
-      dispatch({
-        type: 'DELETE_MESSAGE',
-        id: id,
-      })
+      dispatch(deleteMessage(id))
     ),
     dispatch: dispatch, //defined here to be used in our merge function
   }
@@ -177,11 +197,7 @@ const mergeThreadProps = (stateProps, dispatchProps) => (
     ...stateProps,
     ...dispatchProps,
     onMessageSubmit: (text) => (
-      dispatchProps.dispatch({
-        type: 'ADD_MESSAGE',
-        text: text,
-        threadId: stateProps.thread.id, 
-      })
+      dispatchProps.dispatch(addMessage(text, stateProps.thread.id))
     ),
   }
 );
