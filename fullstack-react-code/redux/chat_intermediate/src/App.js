@@ -149,35 +149,43 @@ const Tabs = (props) => (
 );
 
 //Container Component, propagates the thread tabs and the OPEN_THREAD action to Tabs component
-const ThreadTabs = connect(mapStateToTabsProps, mapDisplatchToTabsProps)(Tabs); //Connect function returns a function that accepts the Presentational component and that function returns our wrapped component (Container Component)
+const ThreadTabs = connect(
+  mapStateToTabsProps, 
+  mapDisplatchToTabsProps
+)(Tabs); //Connect function returns a function that accepts the Presentational component and that function returns our wrapped component (Container Component)
 
-//Container Component, propagates the activeThread and the ADD_MESSAGE and DELETE_MESSAGE actions to Thread
-class ThreadDisplay extends React.Component {
-  componentDidMount() {
-    store.subscribe(() => this.forceUpdate());
+const mapStateToPropsThread = (state) => {
+  return {
+    thread: state.threads.find((t) => t.id === state.activeThreadId),
   }
+};
 
-  render() {
-    const state = store.getState();
-    const activeThreadId = state.activeThreadId;
-    const activeThread = state.threads.find((thread) => thread.id === activeThreadId);
-
-    return (
-     <Thread
-        thread={activeThread}
-        onMessageClick={(id)=>store.dispatch({
-          type: 'DELETE_MESSAGE',
-          id: id,
-        })}
-        onMessageSubmit={(text) => store.dispatch({
-          type:'ADD_MESSAGE',
-          text: text,
-          threadId: activeThreadId,
-        })}
-     />
-    );
+const mapDispatchToPropsThread = (dispatch) => {
+  return {
+    onMessageClick: (id) => (
+      dispatch({
+        type: 'DELETE_MESSAGE',
+        id: id,
+      })
+    ),
+    dispatch: dispatch, //defined here to be used in our merge function
   }
-}
+};
+//Function that takes the returned object of mapStateToProps and mapDispatchToProps, and merge them in one object being this the one used to set props to Tabs component
+const mergeThreadProps = (stateProps, dispatchProps) => (
+  {
+    ...stateProps,
+    ...dispatchProps,
+    onMessageSubmit: (text) => (
+      dispatchProps.dispatch({
+        type: 'ADD_MESSAGE',
+        text: text,
+        threadId: stateProps.thread.id, 
+      })
+    ),
+  }
+);
+
 //Presentational component, just display markup, inside that markup we instantiated other two presentational components: MessageList and TextFieldSubmit, these two components receive data provided as props from ThreadDisplay
 const Thread = (props) => (
   <div className='ui center aligned basic segment'>
@@ -190,6 +198,13 @@ const Thread = (props) => (
     />  
   </div>
 );
+
+//Container Component, propagates the activeThread and the ADD_MESSAGE and DELETE_MESSAGE actions to Thread
+const ThreadDisplay = connect(
+  mapStateToPropsThread, 
+  mapDispatchToPropsThread, 
+  mergeThreadProps
+)(Thread); //Connect accepts a third argument, mergeProps to merge objects returned by mapState and mapDispatch
 
 //Presentational component, just display the messages for a specific Thread, receives the messages data and action behavior from Thread and this one from ThreadDisplay
 const MessageList = (props) => (
