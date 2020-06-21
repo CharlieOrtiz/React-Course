@@ -26,7 +26,7 @@ module.exports = class extends React.Component {
     fieldErrors: {}
   };
 
-  getDerivedStateFromProps(update) {
+  static getDerivedStateFromProps(update) {
     console.log('this.props.fields', this.props.fields, update);
 
     return {fields: update.fields};

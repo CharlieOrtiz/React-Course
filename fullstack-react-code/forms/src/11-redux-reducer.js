@@ -11,13 +11,13 @@ const initialState = {
     name: '',
     email: '',
     course: null,
-    department: null
-  },
+    department: null,
+  }
 };
 
-export function reducer (state = initialState, action) {
-  switch (action.type) {
-    case FETCH_PEOPLE_REQUEST:
+export function reducer(state=initialState, action) {
+  switch(action.type) {
+    case FETCH_PEOPLE_REQUEST: 
       return Object.assign({}, state, {
         isLoading: true
       });
@@ -30,20 +30,20 @@ export function reducer (state = initialState, action) {
       return Object.assign({}, state, {
         saveStatus: 'SAVING'
       });
-    case SAVE_PEOPLE_FAILURE:
-      return Object.assign({}, state, {
-        saveStatus: 'ERROR'
-      });
-    case SAVE_PEOPLE_SUCCESS:
+    case SAVE_PEOPLE_SUCCESS: 
       return Object.assign({}, state, {
         people: action.people,
+        saveStatus: 'SUCCESS',
         person: {
           name: '',
           email: '',
           course: null,
-          department: null
-        },
-        saveStatus: 'SUCCESS'
+          department: null,
+        }
+      });
+    case SAVE_PEOPLE_FAILURE:
+      return Object.assign({}, satet, {
+        saveStatus: 'ERROR'
       });
     default:
       return state;
