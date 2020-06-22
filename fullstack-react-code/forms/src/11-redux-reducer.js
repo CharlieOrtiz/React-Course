@@ -42,7 +42,7 @@ export function reducer(state=initialState, action) {
         }
       });
     case SAVE_PEOPLE_FAILURE:
-      return Object.assign({}, satet, {
+      return Object.assign({}, state, {
         saveStatus: 'ERROR'
       });
     default:
