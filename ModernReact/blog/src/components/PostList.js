@@ -1,11 +1,11 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import {fetchPosts} from '../actions/index';
+import {fetchPostsAndUsers} from '../actions/index';
 import UserHeader from './UserHeader';
 
 class PostList extends React.Component {
     componentDidMount() {
-        this.props.fetchPosts()
+        this.props.fetchPostsAndUsers()
     }
 
     renderList() {
@@ -38,5 +38,5 @@ const mapStateToProps = (state) => {
 
 export default connect(
     mapStateToProps, 
-    {fetchPosts} //mapDispatchToProps; remember this function return an object with some properties equal to action creators, here we're having an object equal to this {fetchPost: fetchPost} but cause property and value are written equal we can use ES6 shorthand and omit the property.
+    {fetchPostsAndUsers} //mapDispatchToProps; remember this function return an object with some properties equal to action creators, here we're having an object equal to this {fetchPost: fetchPost} but cause property and value are written equal we can use ES6 shorthand and omit the property.
 )(PostList);
