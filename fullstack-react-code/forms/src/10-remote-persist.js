@@ -21,6 +21,9 @@ module.exports = class extends React.Component {
       department: null
     },
     fieldErrors: {},
+    people: [],
+    _loading: false,
+    _saveStatus: 'READY'
   };
 
   componentDidMount() {
