@@ -70,8 +70,23 @@ form {
   border-bottom: 1px solid var(--border);
 }
 
+.characters-dashboard {
+  display: flex;
+  flex-wrap: wrap;
+}
+
 .characters-dashboard h3 {
   border-bottom: 1px solid var(--border);
+}
+
+.cast-container {
+  width: 59%;
+  margin-right: 1%;
+}
+
+.favorites-container {
+  width: 39%;
+  margin-left: 1%;
 }
 
 .characters-container {

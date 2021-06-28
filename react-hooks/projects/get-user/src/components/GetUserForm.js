@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 
-const GetUserForm = ({getUsers, initialValue=1}) => {
+const GetUserForm = ({handleSubmit, initialValue=1}) => {
     const [userNum, setUserNum] = useState(initialValue)
 
     function onChangeInput(e) {
@@ -9,12 +9,12 @@ const GetUserForm = ({getUsers, initialValue=1}) => {
 
     function onSubmit(e) {
         e.preventDefault();
-        getUsers(userNum);
+        handleSubmit(userNum);
     }
 
-    useEffect(() => {
-        getUsers(initialValue);
-    }, [getUsers, initialValue])
+    // useEffect(() => {
+    //     getUsers(initialValue);
+    // }, [getUsers, initialValue])
 
     return (
         <form onSubmit={onSubmit} style={{marginBottom: '20px'}}>

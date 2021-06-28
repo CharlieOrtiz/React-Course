@@ -1,34 +1,60 @@
-import React, {useState, useCallback} from 'react';
+import React, {useState, useEffect} from 'react';
+import useFetch from './useFetch';
 import GetUserForm from './GetUserForm';
 import UserDashboard from './UserDashboard'
 
-const USER_API = 'https://randomuser.me/api/?inc=name,email,phone,picture&noinfo';
+const USER_API = 'https://randomuser.me/api/?inc=name,email,phone,picture&results=';
+const INITIAL_USERS = 1;
 
 const App = () => {
-    const [users, setUsers] = useState([]);
-    const [fetchStatus, setFetchStatus] = useState('');
+    // const [numberOfUsers, setNumberOfUsers] = useState(1);
+    const [{ data, isLoading, error }, fetchFrom] = useFetch(USER_API + INITIAL_USERS);
+    // const [users, setUsers] = useState(null);
+    // const [loading, setLoading] = useState(false)
+    // const [error, setError] = useState(null)
+    // const [fetchStatus, setFetchStatus] = useState('');
 
-    const getUsers = useCallback((mount) => {
-        setFetchStatus('PENDING');
-        fetch(`${USER_API}&results=${mount}`)
-            .then((response) => response.json())
-            .then((data) => {
-                setUsers(data.results);
-                setFetchStatus('SUCCESS');
-            })
-            .catch((message) => {
-                setFetchStatus(message.error);
-                console.log(message.error);
-            });
-    }, [setUsers, setFetchStatus]);
+    // useEffect(() => {
+    //     // setFetchStatus('PENDING');
+    //     setLoading(true);
+    //     fetch(`${USER_API}`)
+    //         .then((response) => response.json())
+    //         .then((data) => {
+    //             setUsers(data.results);
+    //             // setFetchStatus('SUCCESS');
+    //             setLoading(false);
+    //         })
+    //         .catch((message) => {
+    //             setError(message.error);
+    //             console.log(message.error);
+    //             setLoading(false);
+    //         });
+    // }, [setUsers, setLoading, setError]);
+
+    // useEffect(() => {
+    //     fetchFrom()
+    // }, [])
+
+    
+    const handleSubmit = (numberOfUsers) => {
+        fetchFrom(USER_API + numberOfUsers);
+    };
 
     return (
         <div className='main-container'>
             <h1>Random User</h1>
-            <GetUserForm
-                getUsers={getUsers}
-            />
-            {
+            <GetUserForm handleSubmit={handleSubmit} initialValue={INITIAL_USERS}/>
+            { isLoading && <div className ='loader'></div> }
+            { error && <span>{error}</span>}
+            { !isLoading && !error && data && <UserDashboard users={data.results} />}
+            {/* { fetchStatus === 'PENDING' ? (
+                <div className ='loader'></div>
+            ) : fetchStatus === 'SUCCESS' ? (
+                <UserDashboard users={users} />
+            ) : (
+                <span>{fetchStatus}</span>
+            )} */}
+            {/* {
                 ((status) => {
                     if(status === 'PENDING') {
                         return (
@@ -46,7 +72,7 @@ const App = () => {
                         )
                     }
                 })(fetchStatus)
-            }
+            } */}
         </div>
     )
 }
